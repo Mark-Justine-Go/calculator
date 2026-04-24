@@ -38,6 +38,10 @@ body,
     height: 20%;
     background-color: #737d6d;
     box-shadow: inset 0px 5px 3px rgb(0, 0, 0);
+    align-content:end;
+    text-align: right;
+    font-size: 30px;
+    overflow: hidden;
 }
 
 .keys{
