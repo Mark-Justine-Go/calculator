@@ -99,7 +99,7 @@ function operate(operator){
             const original = displayDiv.textContent.slice(0,-2);
             if(operator != "=")displayDiv.textContent = `${original} ${operator} `;
         }else{
-            if(operator != "=")displayDiv.textContent += ` ${operator} `
+            if(operator != "=" && displayDiv.textContent.length != 0)displayDiv.textContent += ` ${operator} `
         }
     }
 }
