@@ -1,4 +1,4 @@
-function createDivXAmount(container, row, column, rowClassIdentifier, columnClassIdentifier,textContent){
+function createDivXAmount(container, row, column, rowClassIdentifier, columnClassIdentifier,textContent,specialKeyCountRow=0,specialKeyCountColumn=0){
     let currCount = 0;
     for(let i = 0; i < row; i++){
         const rowDiv = document.createElement("div");
@@ -12,6 +12,22 @@ function createDivXAmount(container, row, column, rowClassIdentifier, columnClas
         }
         container.appendChild(rowDiv);
     }
+
+    currCount = 0;
+    if(specialKeyCountRow > 0){
+        for(let i = 0; i < specialKeyCountRow; i++){
+            const specialKeyRowDiv = document.createElement("div");
+            specialKeyRowDiv.classList.add(rowClassIdentifier);
+            for(let j = 0; j < specialKeyCountColumn; j++){
+                const specialKeyCountColumn = document.createElement("div");
+                specialKeyCountColumn.classList.add(columnClassIdentifier);
+                specialKeyCountColumn.textContent = specialKeys[currCount];
+                currCount++;
+                specialKeyRowDiv.appendChild(specialKeyCountColumn)
+            }
+            container.appendChild(specialKeyRowDiv);
+        }
+    }
 }
 
 function display(displayContainer, value){
@@ -22,7 +38,9 @@ function assignListeners(nodes,displayDiv){
     nodes.forEach(function(node){
         const assignedValue = node.textContent;
         if(arithmeticOperations.includes(node.textContent)){
-            node.addEventListener("click",(e)=>operate(assignedValue));
+            node.addEventListener("click",(e) => operate(assignedValue));
+        }else if(specialKeys.includes(node.textContent)){
+            node.addEventListener("click",(e) => specialKeysFunction(assignedValue));
         }else{
             node.addEventListener("click",(e)=>display(displayDiv,assignedValue));
         }
@@ -86,15 +104,29 @@ function operate(operator){
     }
 }
 
+function specialKeysFunction(key){
+    switch(key){
+        case "AC":
+            displayDiv.textContent = "";
+            break
+        case "DELETE":
+            const currentDisplay = displayDiv.textContent;
+            if(currentDisplay[currentDisplay.length-1] === " "){
+                displayDiv.textContent = displayDiv.textContent.slice(0,-3);
+            }else{
+                displayDiv.textContent = displayDiv.textContent.slice(0,-1);
+            }
+    }
+}
+
 
 const keyContents = [7,8,9,"/",4,5,6,"x",1,2,3,"-",0,".","=","+"];
+const specialKeys = ["AC", "DELETE"];
 const arithmeticOperations = ["+","/","x","-","="];
 const keysDiv = document.querySelector(".keys");
 const displayDiv = document.querySelector(".screen");
 
-createDivXAmount(keysDiv,4,4,"row","column",keyContents);
+createDivXAmount(keysDiv,4,4,"row","column",keyContents,1,2);
 
 const keys = document.querySelectorAll(".column");
 assignListeners(keys,displayDiv);
-
-//clear and delete
